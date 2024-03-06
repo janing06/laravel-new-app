@@ -16,7 +16,7 @@
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Name</label>
-                            <input type="text" name="name"
+                            <input type="text" name="name" value="{{ old('name') }}"
                                 class="form-control @error('name') is-invalid @enderror" placeholder="Name"
                                 id="name">
                             @error('name')
@@ -31,7 +31,7 @@
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Email</label>
-                            <input type="email" name="email"
+                            <input type="email" name="email" value="{{ old('email') }}"
                                 class="form-control @error('email') is-invalid @enderror" placeholder="Email"
                                 id="email">
                             @error('email')
@@ -45,11 +45,18 @@
                     <div class="col-lg-7">
                         <!-- Form -->
                         <div class="form-group mb-4">
-                            <label for="location">Location</label>
-                            <input type="text" name="location"
-                                class="form-control @error('location') is-invalid @enderror" id="location">
+                            <label for="map">Location</label>
+                            <input type="hidden" name="latitude"
+                                class="form-control @error('latitude') is-invalid @enderror" id="latitude">
+                            <input type="hidden" name="longitude" class="form-control" id="longitude">
 
-                            <div id="map" style="height: 400px;" class="rounded"></div>
+                            <div id="map" style="height: 400px;"
+                                class="rounded @error('latitude') border border-2 border-danger @enderror"></div>
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    The map field is required
+                                </div>
+                            @enderror
 
                         </div>
                         <!-- End of Form -->
@@ -102,7 +109,7 @@
 
 
     <script>
-        var map = L.map('map').setView([0, 0], 2);
+        var map = L.map('map').setView([12.82037128739367, 122.71321088722186], 5);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -137,7 +144,8 @@
             // Add the new marker
             marker = layer;
 
-            document.querySelector('#location').value = [marker._latlng.lat, marker._latlng.lng]
+            document.querySelector('#latitude').value = marker._latlng.lat
+            document.querySelector('#longitude').value = marker._latlng.lng
 
             console.log("Marker Latitude:", marker._latlng.lat);
             console.log("Marker Longitude:", marker._latlng.lng);
