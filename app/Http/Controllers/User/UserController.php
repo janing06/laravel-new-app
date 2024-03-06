@@ -29,16 +29,23 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
+            'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
         ]);
+
+
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'latitude' => (string) $request->latitude,
+            'longitude' => (string) $request->longitude,
         ]);
 
         Alert::toast('User Successfully Added', 'success');
@@ -57,12 +64,15 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class . ',email,' . $user->id],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+
         ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+            'latitude' => (string) $request->latitude,
+            'longitude' => (string) $request->longitude,
         ]);
 
         Alert::toast('User Successfully Updated', 'success');

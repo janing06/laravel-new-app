@@ -84,8 +84,12 @@
                             <tr>
                                 <td><a href="{{ route('users.show', $user) }}"
                                         class="text-primary fw-bold">{{ $user->id }}</a></td>
-                                <td class="">
-                                    {{ $user->name }}
+                                <td>
+                                    @if (auth()->user()->id == $user->id)
+                                        <span class="badge px-3 rounded-pill bg-success">You</span>
+                                    @else
+                                        {{ $user->name }}
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $user->email }}

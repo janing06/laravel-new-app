@@ -48,12 +48,33 @@
                         <!-- End of Form -->
                     </div>
 
+                    <div class="col-lg-7">
+                        <!-- Form -->
+                        <div class="form-group mb-4">
+                            <label for="map">Location</label>
+                            <input type="hidden" name="latitude" class="form-control" id="latitude"
+                                value="{{ $user->latitude }}">
+                            <input type="hidden" name="longitude" class="form-control" id="longitude"
+                                alue="{{ $user->longitude }}">
+
+                            <div id="map" style="height: 400px;"
+                                class="rounded @error('latitude') border border-2 border-danger @enderror"></div>
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    The map field is required
+                                </div>
+                            @enderror
+
+                        </div>
+                        <!-- End of Form -->
+                    </div>
+
 
                     <div class="col-lg-7">
                         <div class="form-group mb-4">
                             <!-- Form -->
                             <div class="form-group mb-4">
-                                <label for="password">Password</label>
+                                <label for="password">Change Password</label>
                                 <input type="password" name="password" placeholder="Password"
                                     class="form-control @error('password') is-invalid @enderror" id="password">
                                 @error('password')
@@ -109,7 +130,12 @@
                                 <i class="fa-solid fa-circle-exclamation" style="font-size: 80px;color:red"></i>
                             </span>
                             <h2 class="h4 modal-title my-3">Delete User</h2>
-                            <p>Are you sure you want to delete this user?</p>
+                            @if (auth()->user()->id == $user->id)
+                                <p>Are you sure you want to delete this user? You are currently logged in to this user.
+                                    It will automatically Logged out.</p>
+                            @else
+                                <p>Are you sure you want to delete this user?</p>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -146,5 +172,51 @@
 
 
 
+    <script>
+        var userLocation = [`{{ $user->latitude }}`, `{{ $user->longitude }}`]
+        console.log(userLocation)
+        var map = L.map('map').setView([12.82037128739367, 122.71321088722186], 5);
 
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var drawControl = new L.Control.Draw({
+            draw: {
+                marker: true,
+                circle: false,
+                polyline: false,
+                polygon: false,
+                rectangle: false
+            },
+        });
+
+        map.addControl(drawControl);
+
+        var marker = L.marker(userLocation);
+
+        var drawFeatures = new L.FeatureGroup().addLayer(marker);
+        map.addLayer(drawFeatures);
+
+        map.on("draw:created", function(e) {
+            var type = e.layerType;
+            var layer = e.layer;
+
+            // Remove the previous marker
+            if (marker) {
+                drawFeatures.removeLayer(marker);
+            }
+
+            // Add the new marker
+            marker = layer;
+
+            document.querySelector('#latitude').value = marker._latlng.lat
+            document.querySelector('#longitude').value = marker._latlng.lng
+
+            console.log("Marker Latitude:", marker._latlng.lat);
+            console.log("Marker Longitude:", marker._latlng.lng);
+
+            drawFeatures.addLayer(marker);
+        });
+    </script>
 </x-app-layout>
