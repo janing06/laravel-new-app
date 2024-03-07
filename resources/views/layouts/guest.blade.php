@@ -62,7 +62,7 @@
     <script src="{{ asset('vendor/onscreen/dist/on-screen.umd.min.js') }}"></script>
 
     <!-- Slider -->
-    <script src="{{ asset('vendor/nouislider/distribute/nouislider.min.js') }}"></script>
+    <script src="{{ asset('vendor/nouislider/dist/nouislider.min.js') }}"></script>
 
     <!-- Smooth scroll -->
     <script src="{{ asset('vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js') }}"></script>

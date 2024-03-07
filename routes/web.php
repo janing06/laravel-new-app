@@ -3,7 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +34,23 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('users', UserController::class);
+    Route::resource('/users', UserController::class);
+    Route::post('/users_search', function (Request $request) {
+
+        $query = $request['query'];
+
+        $users = User::where('name', 'LIKE', '%' . $query . '%')
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
+
+
+        return response()->json(compact('users'));
+
+
+        return response('okay');
+    });
 });
+
+
 
 require __DIR__ . '/auth.php';

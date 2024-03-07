@@ -22,7 +22,7 @@
                 <form action="{{ route('users.index') }}" method="get">
                     <div class="input-group me-2 me-lg-3 fmxw-400">
                         <input type="text" class="form-control border" name="search" placeholder="Search users"
-                            value="{{ $searchVal }}">
+                            value="{{ $searchVal }}" id="search">
                         <button class="btn btn-white border">
                             <svg class="icon icon-xs" x-description="Heroicon name: solid/search"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -78,36 +78,8 @@
 
                         </tr>
                     </thead>
-                    <tbody class="align-middle">
-                        <!-- Item -->
-                        @forelse ($users as $user)
-                            <tr>
-                                <td><a href="{{ route('users.show', $user) }}"
-                                        class="text-primary fw-bold">{{ $user->id }}</a></td>
-                                <td>
-                                    @if (auth()->user()->id == $user->id)
-                                        <span class="badge px-3 rounded-pill bg-success">You</span>
-                                    @else
-                                        {{ $user->name }}
-                                    @endif
-                                </td>
-                                <td>
-                                    {{ $user->email }}
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary" href="{{ route('users.show', $user) }}">Show</a>
-                                </td>
-
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4">
-
-                                </td>
-                            </tr>
-                        @endforelse
-
-                        <!-- End of Item -->
+                    <tbody class="align-middle" id="#users-list">
+                        @include('user.users_list')
                     </tbody>
                 </table>
             </div>
@@ -119,6 +91,35 @@
         {{ $users->links('vendor.pagination.bootstrap-5') }}
     </div>
 
-    </div>
+
+
+    <script>
+        $(document).ready(function() {
+
+            $('#search').on('keyup', function() {
+                var query = $(this).val();
+
+                console.log(query);
+
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/users_search',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        query: query
+                    },
+                    success: function(data) {
+
+                        console.log(data.users)
+                        $('#users-list').html(data);
+                    }
+                });
+            });
+        });
+    </script>
 
 </x-app-layout>

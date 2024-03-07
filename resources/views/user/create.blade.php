@@ -115,6 +115,8 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
         var drawControl = new L.Control.Draw({
             draw: {
                 marker: true,
@@ -123,14 +125,28 @@
                 polygon: false,
                 rectangle: false
             },
+            edit: {
+                featureGroup: drawnItems
+            }
         });
-
         map.addControl(drawControl);
+
+        // var drawControl = new L.Control.Draw({
+        //     draw: {
+        //         marker: true,
+        //         circle: false,
+        //         polyline: false,
+        //         polygon: false,
+        //         rectangle: false
+        //     },
+        // });
+
+        // map.addControl(drawControl);
 
         var marker;
 
-        var drawFeatures = new L.FeatureGroup();
-        map.addLayer(drawFeatures);
+        // var drawFeatures = new L.FeatureGroup();
+        // map.addLayer(drawFeatures);
 
         map.on("draw:created", function(e) {
             var type = e.layerType;
@@ -138,7 +154,7 @@
 
             // Remove the previous marker
             if (marker) {
-                drawFeatures.removeLayer(marker);
+                drawnItems.removeLayer(marker);
             }
 
             // Add the new marker
@@ -150,7 +166,7 @@
             console.log("Marker Latitude:", marker._latlng.lat);
             console.log("Marker Longitude:", marker._latlng.lng);
 
-            drawFeatures.addLayer(marker);
+            drawnItems.addLayer(marker);
         });
     </script>
 
