@@ -112,7 +112,9 @@
         var map = L.map('map').setView([12.82037128739367, 122.71321088722186], 5);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 20,
+            minZoom: 11,
         }).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
@@ -126,27 +128,14 @@
                 rectangle: false
             },
             edit: {
-                featureGroup: drawnItems
-            }
+                featureGroup: drawnItems,
+                remove: true,
+                edit: false,
+            },
         });
         map.addControl(drawControl);
 
-        // var drawControl = new L.Control.Draw({
-        //     draw: {
-        //         marker: true,
-        //         circle: false,
-        //         polyline: false,
-        //         polygon: false,
-        //         rectangle: false
-        //     },
-        // });
-
-        // map.addControl(drawControl);
-
         var marker;
-
-        // var drawFeatures = new L.FeatureGroup();
-        // map.addLayer(drawFeatures);
 
         map.on("draw:created", function(e) {
             var type = e.layerType;
@@ -168,6 +157,11 @@
 
             drawnItems.addLayer(marker);
         });
+
+        map.on("draw:deleted", function(e) {
+            document.querySelector('#latitude').value = ''
+            document.querySelector('#longitude').value = ''
+        })
     </script>
 
 </x-app-layout>

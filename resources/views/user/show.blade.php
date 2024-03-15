@@ -194,39 +194,24 @@
                 rectangle: false
             },
             edit: {
-                featureGroup: drawnItems
-            }
+                featureGroup: drawnItems,
+                remove: true,
+                edit: false,
+            },
         });
         map.addControl(drawControl);
 
-        // var drawControl = new L.Control.Draw({
-        //     draw: {
-        //         marker: true,
-        //         circle: false,
-        //         polyline: false,
-        //         polygon: false,
-        //         rectangle: false
-        //     },
-        // });
-
-        // map.addControl(drawControl);
-
         var marker;
-
-        // var drawFeatures = new L.FeatureGroup();
-        // map.addLayer(drawFeatures);
 
         map.on("draw:created", function(e) {
 
             var type = e.layerType;
             var layer = e.layer;
 
-            // Remove the previous marker
             if (marker) {
                 drawnItems.removeLayer(marker);
             }
 
-            // Add the new marker
             marker = layer;
 
             document.querySelector('#latitude').value = marker._latlng.lat
@@ -239,49 +224,5 @@
             document.querySelector('#latitude').value = ''
             document.querySelector('#longitude').value = ''
         })
-
-        // var map = L.map('map').setView([12.82037128739367, 122.71321088722186], 5);
-
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     attribution: '© OpenStreetMap contributors'
-        // }).addTo(map);
-
-        // var drawControl = new L.Control.Draw({
-        //     draw: {
-        //         marker: true,
-        //         circle: false,
-        //         polyline: false,
-        //         polygon: false,
-        //         rectangle: false
-        //     },
-        // });
-
-        // map.addControl(drawControl);
-
-        // var marker = L.marker(userLocation).bindPopup(`{{ $user->latitude }}, {{ $user->longitude }}`);
-
-        // var drawFeatures = new L.FeatureGroup().addLayer(marker);
-        // map.addLayer(drawFeatures);
-
-        // map.on("draw:created", function(e) {
-        //     var type = e.layerType;
-        //     var layer = e.layer;
-
-        //     // Remove the previous marker
-        //     if (marker) {
-        //         drawFeatures.removeLayer(marker);
-        //     }
-
-        //     // Add the new marker
-        //     marker = layer;
-
-        //     document.querySelector('#latitude').value = marker._latlng.lat
-        //     document.querySelector('#longitude').value = marker._latlng.lng
-
-        //     console.log("Marker Latitude:", marker._latlng.lat);
-        //     console.log("Marker Longitude:", marker._latlng.lng);
-
-        //     drawFeatures.addLayer(marker);
-        // });
     </script>
 </x-app-layout>

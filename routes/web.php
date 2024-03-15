@@ -34,21 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('/users', UserController::class);
-    Route::post('/users_search', function (Request $request) {
 
-        $query = $request['query'];
-
-        $users = User::where('name', 'LIKE', '%' . $query . '%')
-            ->orderBy('created_at', 'desc')
-            ->paginate(6);
-
-
-        return response()->json(compact('users'));
-
-
-        return response('okay');
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('table', [UserController::class, 'showTable'])->name('table');
     });
+    Route::resource('users', UserController::class);
 });
 
 

@@ -8,6 +8,16 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Volt CSS -->
+    <link type="text/css" href="{{ asset('css/volt.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/admin/custom.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap-datatables/bootstrap-datatable.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap-select/bootstrap-select.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -27,9 +37,6 @@
     <!-- Notyf -->
     <link type="text/css" href="{{ asset('vendor/notyf/notyf.min.css" rel="stylesheet') }}">
 
-    <!-- Volt CSS -->
-    <link type="text/css" href="{{ asset('css/volt.css') }}" rel="stylesheet">
-
     {{-- font awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -43,8 +50,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
-    {{-- ajax --}}
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
 
@@ -73,6 +78,15 @@
             @include('layouts.footer')
         </main>
     </div>
+    {{-- JQuery --}}
+    <script src="{{ asset('vendor/jquery/jquery-3.6.4.min.js') }}"></script>
+
+    {{-- Data Tables --}}
+    <script src="{{ asset('vendor/bootstrap-datatables/jquery.datatables.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap-datatables/bootstrap-datatables.min.js') }}"></script>
+
+    {{-- Sweet Alert --}}
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 
     <!-- Core -->
     <script src="{{ asset('vendor/@popperjs/core/dist/umd/popper.min.js') }}"></script>
@@ -114,6 +128,9 @@
 
     <!-- Volt JS -->
     <script src="{{ asset('assets/js/volt.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+    @stack('scripts')
 
 
 </body>

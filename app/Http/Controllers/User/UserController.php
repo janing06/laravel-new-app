@@ -5,9 +5,12 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -19,6 +22,21 @@ class UserController extends Controller
         $users = User::where('name', 'LIKE', '%' . $searchVal . '%')->orderBy('created_at', 'desc')->paginate(6)->withQueryString();
 
         return view('user.index', compact('users', 'searchVal'));
+    }
+
+    public function showTable(Request $request)
+    {
+        if ($request->ajax()) {
+            $users = User::where('id', '!=', Auth::id())->select('id', 'name', 'email', 'created_at');
+
+            return DataTables::of($users)
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('F jS \of Y');
+                })
+                ->addColumn('action', 'user.table-buttons')
+                // ->rawColumns(['action', 'created_at'])
+                ->toJson();
+        }
     }
 
     public function create()
@@ -81,8 +99,19 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+
+        if ($request->ajax()) {
+
+            $user->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully deleted',
+
+            ], Response::HTTP_OK);
+        }
+
 
         $user->delete();
 
